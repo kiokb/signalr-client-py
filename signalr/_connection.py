@@ -22,6 +22,7 @@ class Connection:
         self.__transport = AutoTransport(session, self)
         self.__greenlet = None
         self.started = False
+        self.params = {}
 
         def handle_error(**kwargs):
             error = kwargs["E"] if "E" in kwargs else None

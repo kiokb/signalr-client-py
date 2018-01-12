@@ -56,6 +56,9 @@ class Transport:
         args['connectionToken'] = self._connection.token
         args['connectionData'] = self._connection.data
 
+        for k, v in self._connection.params.items():
+            args[k] = v
+
         return self.__get_base_url(self._connection, action, **args)
 
     @staticmethod

@@ -39,8 +39,18 @@ class WebSocketsTransport(Transport):
         self._session.get(self._get_url('start'))
 
         def _receive():
-            for notification in self.ws:
-                self._handle_notification(notification)
+            while True:
+                try:
+                    for notification in self.ws:
+                        self._handle_notification(notification)
+                except:
+                    self.ws.close()
+                    self.ws = create_connection(ws_url,
+                                                header=self.__get_headers(),
+                                                cookie=self.__get_cookie_str(),
+                                                enable_multithread=True)
+                    self._session.get(self._get_url('start'))
+
 
         return _receive
 

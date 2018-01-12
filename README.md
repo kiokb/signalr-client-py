@@ -1,3 +1,9 @@
+# bF singalR test
+
+See [examples/bitflyer.py](examples/bitflyer.py), commit: bb839906a254dae10364c17b38a6b07663abd59d
+
+Note: monkey patch in this library breaks pybitflyer. Use `import signalr` after fork().
+
 # signalr-client-py
 
 Python client proxy for [SignalR](http://signalr.net/).
