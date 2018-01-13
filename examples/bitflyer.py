@@ -1,8 +1,5 @@
-from requests import Session
-from signalr import Connection
-from time import sleep
-import pprint
-import sys
+from multiprocessing import Process, Queue
+
 
 def get_executions(messages):
     logs = []
@@ -18,24 +15,32 @@ def get_executions(messages):
                 logs.append(log)
     return logs
 
-if __name__ == "__main__":
+def signalr_listener(queue):
+    from requests import Session
+    from signalr import Connection
+    
     with Session() as session:
         connection = Connection("https://lightning.bitflyer.jp/signalr", session)
         connection.params = {"account_id": "DEMO2", "products": "FX_BTC_JPY,heartbeat"}
-        chat = connection.register_hub('BFEXHub')
+        listener = connection.register_hub('BFEXHub')
 
-        def print_received_message(messages):
+        def message_handler(messages):
             logs = get_executions(messages)
-            for log in logs:
-                print(log)
-
-        def print_error(error):
-            print('error: ', error)
-
-        chat.client.on('ReceiveTickers', print_received_message)
-
-        connection.error += print_error
-
+            if logs:
+                queue.put(logs)
+        
+        listener.client.on('ReceiveTickers', message_handler)
         with connection:
             while True:
                 connection.wait(120)
+    
+
+if __name__ == "__main__":
+    queue = Queue()
+    proc = Process(target=signalr_listener, args=(queue,))
+    proc.start()
+
+    while True:
+        logs = queue.get()
+        for log in logs:
+            print(log)
