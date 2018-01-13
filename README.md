@@ -4,6 +4,12 @@ See [examples/bitflyer.py](examples/bitflyer.py), commit: bb839906a254dae10364c1
 
 Note: monkey patch in this library breaks pybitflyer. Use `import signalr` after fork().
 
+```
+git clone https://github.com/nagadomi/signalr-client-py.git -b bf
+cd signalr-client-py
+pip3 install .
+```
+
 # signalr-client-py
 
 Python client proxy for [SignalR](http://signalr.net/).
