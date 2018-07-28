@@ -20,7 +20,7 @@ def signalr_listener(queue):
     from signalr import Connection
     
     with Session() as session:
-        connection = Connection("https://lightning.bitflyer.jp/signalr", session)
+        connection = Connection("https://signal.bitflyer.jp/signalr", session)
         connection.params = {"account_id": "DEMO2", "products": "FX_BTC_JPY,heartbeat"}
         listener = connection.register_hub('BFEXHub')
 
